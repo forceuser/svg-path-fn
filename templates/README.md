@@ -37,13 +37,12 @@ npm i {{package.name}} --save
 </script>
 ```
 
-And then use **{{package["va-release"].library}}** as global variable
+And then use **svgPathFn** as global variable
 ```html
 <script>
-	console.log({{package["va-release"].library}});
+	console.log(svgPathFn);
 </script>
 ```
-## [Documentation](./DOCUMENTATION.md)
 
 ## Example
 
