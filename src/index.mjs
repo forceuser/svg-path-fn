@@ -4,6 +4,7 @@ import {default as line, line as lineFn} from "./line.mjs";
 import cubicBezier from "./cubic-bezier.mjs";
 import quadraticBezier from "./quadratic-bezier.mjs";
 import arc from "./arc.mjs";
+import {round} from "./math.mjs";
 
 export const mirrorPoint = (p, z) => {
 	return {
@@ -13,7 +14,7 @@ export const mirrorPoint = (p, z) => {
 };
 
 export default function svgPath (pathString) {
-	const list = makeAbsolute(parseSVG(pathString));
+	const list = typeof pathString === "string" ? makeAbsolute(parseSVG(pathString)) : pathString;
 	const pathList = [];
 	let lastHandle;
 	list.forEach(item => {
@@ -73,10 +74,10 @@ export default function svgPath (pathString) {
 	});
 	let start = 0;
 	pathList.forEach(item => {
-		item.start = start;
+		item.start = round(start);
 		item.size = item.length / length;
 		start += item.size;
-		item.end = start;
+		item.end = round(start);
 	});
 	return {
 		val (t) {
