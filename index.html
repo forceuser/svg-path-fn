@@ -1,0 +1,118 @@
+<!doctype html>
+<html>
+
+<head>
+</head>
+
+<body>
+	<style>
+		*,
+		*::after,
+		*::before {
+			box-sizing: border-box;
+			background: none;
+			color: inherit;
+			font: inherit;
+			padding: 0;
+			margin: 0;
+			outline: none;
+			border: none;
+			text-decoration: none;
+			box-shadow: none;
+			vertical-align: top;
+			min-height: 0;
+			min-width: 0;
+			-webkit-font-smoothing: antialiased;
+			-webkit-tap-highlight-color: transparent;
+		}
+	</style>
+
+	<script src="./dist/js/index.modern.js">
+	</script>
+	<script>
+		const canvas = document.createElement("canvas");
+		document.body.appendChild(canvas);
+		const w = 500;
+		const h = 500;
+		canvas.width = w;
+		canvas.height = h;
+		const ctx = canvas.getContext("2d");
+		ctx.clearRect(0, 0, w, h);
+
+		const fn1 = svgPathFn(`M 213.1,6.7
+			c -32.4-14.4-73.7,0-88.1,30.6
+			C 110.6,4.9,67.5-9.5,36.9,6.7
+			C 2.8,22.9-13.4,62.4,13.5,110.9
+			C 33.3,145.1,67.5,170.3,125,217
+			c 59.3-46.7,93.5-71.9,111.5-106.1
+			C 263.4,64.2,247.2,22.9,213.1,6.7
+			z`);
+		const fn2 = svgPathFn(`M 10 80 Q 52.5 10, 95 80 T 180 80`);
+		const fn3 = svgPathFn(`M 10 315
+			L 110 215
+			A 30 50 -45 0 1 162.55 162.45
+			L 172.55 152.45
+			A 30 50 -45 0 1 215.1 109.9
+			L 315 10`);
+		function drawPoint(x, y, color) {
+			ctx.save();
+			ctx.strokeStyle = color;
+			ctx.fillStyle = color;
+			ctx.beginPath();
+			ctx.beginPath();
+			ctx.arc(x, y, 1, 0, 2 * Math.PI);
+			ctx.stroke();
+			ctx.fill();
+			ctx.restore();
+		}
+		const drawPath = (fn, color = "red") => {
+			ctx.save();
+			ctx.beginPath();
+			let i = 0;
+			const step = 1 / fn.length / 1.2;
+			let f = true;
+			ctx.strokeStyle = color;
+			while (i < 1) {
+				const p = fn.val(i);
+				if (f) {
+					ctx.moveTo(p.x, p.y);
+					f = false;
+				}
+				else {
+					ctx.lineTo(p.x, p.y);
+				}
+				i += step;
+			}
+			ctx.stroke();
+			ctx.restore();
+		}
+		drawPath(fn1, "red");
+		drawPath(fn2, "green");
+		drawPath(fn3, "purple");
+		drawPoint(52.5,	 10);
+		drawPoint(110, 215, "yellow");
+	</script>
+	<div style="position: absolute; top: 2px; left: 2px; z-index: -1;">
+		<svg width="500" height="500" xmlns="http://www.w3.org/2000/svg">
+			<path d="M 10 80 Q 52.5 10, 95 80 T 180 80" stroke="black" fill="transparent" />
+			<path d="
+				M 213.1,6.7
+				c -32.4-14.4-73.7,0-88.1,30.6
+				C 110.6,4.9,67.5-9.5,36.9,6.7
+				C 2.8,22.9-13.4,62.4,13.5,110.9
+				C 33.3,145.1,67.5,170.3,125,217
+				c 59.3-46.7,93.5-71.9,111.5-106.1
+				C 263.4,64.2,247.2,22.9,213.1,6.7
+				z" stroke="black" fill="transparent" />
+				<path d="
+				M 10 315
+				L 110 215
+				A 30 50 -45 0 1 162.55 162.45
+				L 172.55 152.45
+				A 30 50 -45 0 1 215.1 109.9
+				L 315 10" stroke="black" fill="transparent" />
+		</svg>
+	</div>
+</body>
+
+</html>

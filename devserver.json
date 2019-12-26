@@ -1,0 +1,9 @@
+{
+	"port": "8080",
+	"open": "http://${domain}:${port}/",
+	"proxy": "http://info.cern.ch/",
+	"domain": "localhost",
+	"indexFiles": ["index.html"],
+	"webpackEnv": [{"BROWSERSLIST_ENV": "modern", "WEBPACK_BUNDLE_SUFFIX": ".modern"}, {"BROWSERSLIST_ENV": "legacy"}],
+	"env": {}
+}
