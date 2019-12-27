@@ -146,7 +146,7 @@ export default function (type, params, fn) {
 			});
 		}
 
-		const accuracy = 20;
+		const accuracy = 60;
 		let l = ctrl.val(0);
 		let lt = 0;
 		for (let i = 1; i <= accuracy; i++) {
