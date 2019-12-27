@@ -132,7 +132,7 @@ export default function (type, params, fn) {
 		// }
 		// else
 		if (ctrl.type === "path") {
-			const {sections} = this.params;
+			const {sections} = ctrl.params;
 			let length = 0;
 			sections.forEach(item => {
 				length += item.length;

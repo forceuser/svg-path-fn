@@ -1,6 +1,6 @@
 {
 	"name": "svg-path-fn",
-	"version": "0.0.79",
+	"version": "0.0.80",
 	"description": "Library for creating functions based on svg path",
 	"license": "MIT",
 	"main": "dist/svg-path-fn.js",
