@@ -1,5 +1,6 @@
 import {line} from "./line.mjs";
 import {round, deg, rad, pow, abs, sin, cos, sqrt, acos} from "./math.mjs";
+import sectionBase from "./section-base.mjs";
 
 const ellipse = (rx, ry, cx, cy, phi, a) => {
 	const x = rx * cos(a);
@@ -78,47 +79,31 @@ function vectorAngle ([ux, uy], [vx, vy]) {
 	return res;
 }
 
-export default function (x1, y1, x2, y2, fa, fs, rx, ry, phiDeg) {
+export default function (params) {
+	const {x1, y1, x2, y2, fa, fs, rx, ry, phiDeg} = params;
 	let length;
 	if (!rx || !ry) {
-		return {
-			type: "arc",
-			val (t) {
-				return {
-					x: line(t, {y1: x1, y2: x2}),
-					y: line(t, {y1, y2}),
-				};
-			},
-			get length () {
-				if (length == null) {
-					length = sqrt(pow(x2 - x1) + pow(y2 - y1));
-				}
-				return length;
-			},
-		};
+		// return {
+		// 	type: "arc",
+		// 	val (t) {
+		// 		return {
+		// 			x: line(t, {y1: x1, y2: x2}),
+		// 			y: line(t, {y1, y2}),
+		// 		};
+		// 	},
+		// 	get length () {
+		// 		if (length == null) {
+		// 			length = sqrt(pow(x2 - x1) + pow(y2 - y1));
+		// 		}
+		// 		return length;
+		// 	},
+		// };
 	}
 
-	const params = getCenterParameters(x1, y1, x2, y2, fa, fs, rx, ry, rad(phiDeg));
+	const ellipseParams = getCenterParameters(x1, y1, x2, y2, fa, fs, rx, ry, rad(phiDeg));
 
-	return {
-		type: "arc",
-		val (t) {
-			const a = line(t, {y1: params.theta, y2: params.theta + params.dTheta});
-			return ellipse(params.rx, params.ry, params.cx, params.cy, rad(phiDeg), a);
-		},
-		get length () {
-			if (length == null) {
-				length = 0;
-				const accuracy = 10;
-				let l = this.val(0);
-				for (let i = 1; i <= accuracy; i++) {
-					const p = this.val(i / accuracy);
-					length += sqrt(pow(p.x - l.x) + pow(p.y - l.y));
-					l = p;
-				}
-				length = round(length);
-			}
-			return length;
-		},
-	};
+	return sectionBase("arc", params, t => {
+		const a = line(t, {y1: ellipseParams.theta, y2: ellipseParams.theta + ellipseParams.dTheta});
+		return ellipse(ellipseParams.rx, ellipseParams.ry, ellipseParams.cx, ellipseParams.cy, rad(phiDeg), a);
+	});
 }

@@ -54,13 +54,13 @@
 			L 172.55 152.45
 			A 30 50 -45 0 1 215.1 109.9
 			L 315 10`);
-		function drawPoint(x, y, color) {
+		function drawPoint(x, y, color, width = 1) {
 			ctx.save();
 			ctx.strokeStyle = color;
 			ctx.fillStyle = color;
 			ctx.beginPath();
 			ctx.beginPath();
-			ctx.arc(x, y, 1, 0, 2 * Math.PI);
+			ctx.arc(x, y, width, 0, 2 * Math.PI);
 			ctx.stroke();
 			ctx.fill();
 			ctx.restore();
@@ -89,11 +89,48 @@
 		drawPath(fn1, "red");
 		drawPath(fn2, "green");
 		drawPath(fn3, "purple");
-		drawPoint(52.5,	 10);
-		drawPoint(110, 215, "yellow");
+		// drawPoint(52.5,	 10);
+		// drawPoint(110, 215, "yellow");
+		console.log(fn1, fn2, fn3);
 		console.log("fn1.val(1)", fn1.val(1));
+		const intersections = fn1.intersect(fn3);
+		console.log("intersections", intersections);
+		intersections.forEach(i => {
+			drawPoint(i.x, i.y, "black", 2);
+		});
+		fn3.params.sections.forEach(section => {
+			section.debugSlices.forEach(slice => {
+				ctx.beginPath();
+				ctx.strokeStyle = "black";
+				ctx.rect(slice.left, slice.top, slice.right - slice.left, slice.bottom - slice.top);
+				ctx.stroke();
+			});
+			// section.slices.forEach(slice => {
+			// 	ctx.beginPath();
+			// 	ctx.strokeStyle = "red";
+			// 	ctx.rect(slice.left, slice.top, slice.right - slice.left, slice.bottom - slice.top);
+			// 	ctx.stroke();
+			// });
+		});
+
+		fn2.params.sections.forEach(section => {
+			section.debugSlices.forEach(slice => {
+				ctx.beginPath();
+				ctx.strokeStyle = "gray";
+				ctx.rect(slice.left, slice.top, slice.right - slice.left, slice.bottom - slice.top);
+				ctx.stroke();
+			});
+			// section.slices.forEach(slice => {
+			// 	ctx.beginPath();
+			// 	ctx.strokeStyle = "purple";
+			// 	ctx.rect(slice.left, slice.top, slice.right - slice.left, slice.bottom - slice.top);
+			// 	ctx.stroke();
+			// });
+		});
+
+		// drawPoint(110, 215, "yellow");
 	</script>
-	<div style="position: absolute; top: 2px; left: 2px; z-index: -1;">
+	<!-- <div style="position: absolute; top: 2px; left: 2px; z-index: -1;">
 		<svg width="500" height="500" xmlns="http://www.w3.org/2000/svg">
 			<path d="M 10 80 Q 52.5 10, 95 80 T 180 80" stroke="black" fill="transparent" />
 			<path d="
@@ -113,7 +150,7 @@
 				A 30 50 -45 0 1 215.1 109.9
 				L 315 10" stroke="black" fill="transparent" />
 		</svg>
-	</div>
+	</div> -->
 </body>
 
 </html>

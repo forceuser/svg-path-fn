@@ -5,6 +5,7 @@ import cubicBezier from "./cubic-bezier.mjs";
 import quadraticBezier from "./quadratic-bezier.mjs";
 import arc from "./arc.mjs";
 import {round} from "./math.mjs";
+import sectionBase from "./section-base.mjs";
 
 export const mirrorPoint = (p, z) => {
 	return {
@@ -15,7 +16,7 @@ export const mirrorPoint = (p, z) => {
 
 export default function svgPath (pathString) {
 	const list = typeof pathString === "string" ? makeAbsolute(parseSVG(pathString)) : pathString;
-	const pathList = [];
+	const sections = [];
 	let lastHandle;
 	list.forEach(item => {
 		switch (item.code) {
@@ -23,11 +24,11 @@ export default function svgPath (pathString) {
 			case "V":
 			case "H":
 			case "Z": {
-				pathList.push(line(item.x0, item.y0, item.x, item.y));
+				sections.push(line({x1: item.x0, y1: item.y0, x2: item.x, y2: item.y}));
 				break;
 			}
 			case "A": {
-				pathList.push(arc(item.x0, item.y0, item.x, item.y, item.largeArc, item.sweep, item.rx, item.ry, item.xAxisRotation));
+				sections.push(arc({x1: item.x0, y1: item.y0, x2: item.x, y2: item.y, fa: item.largeArc, fs: item.sweep, rx: item.rx, ry: item.ry, phiDeg: item.xAxisRotation}));
 				break;
 			}
 			case "Q":
@@ -44,7 +45,7 @@ export default function svgPath (pathString) {
 					}
 				}
 
-				pathList.push(quadraticBezier(item.x0, item.y0, item.x, item.y, item.x1, item.y1));
+				sections.push(quadraticBezier({x1: item.x0, y1: item.y0, x2: item.x, y2: item.y, hx: item.x1, hy: item.y1}));
 				lastHandle = {x: item.x1, y: item.y1};
 				break;
 			}
@@ -61,31 +62,16 @@ export default function svgPath (pathString) {
 						item.y1 = mirrored.y;
 					}
 				}
-
-				pathList.push(cubicBezier(item.x0, item.y0, item.x, item.y, item.x1, item.y1, item.x2, item.y2));
+				const section = cubicBezier({x1: item.x0, y1: item.y0, x2: item.x, y2: item.y, h1x: item.x1, h1y: item.y1, h2x: item.x2, h2y: item.y2});
+				sections.push(section);
 				lastHandle = {x: item.x2, y: item.y2};
 				break;
 			}
 		}
 	});
-	let length = 0;
-	pathList.forEach(item => {
-		length += item.length;
+
+	return sectionBase("path", {pathString, sections}, t => {
+		const item = sections.find(item => t >= item.from && t <= item.to);
+		return item.val(lineFn(t, {x1: item.from, x2: item.to}));
 	});
-	let start = 0;
-	pathList.forEach(item => {
-		item.start = round(start);
-		item.size = item.length / length;
-		start += item.size;
-		item.end = round(start);
-	});
-	return {
-		val (t) {
-			const item = pathList.find(item => t >= item.start && t <= item.end);
-			return item.val(lineFn(t, {x1: item.start, x2: item.end}));
-		},
-		get length () {
-			return length;
-		},
-	};
 }
