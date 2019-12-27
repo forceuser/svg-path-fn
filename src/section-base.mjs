@@ -77,8 +77,8 @@ export default function (type, params, fn) {
 								y: (Math.min(sliceA.top, sliceB.top) + Math.max(sliceA.bottom, sliceB.bottom)) / 2,
 								t: {a, b},
 								abs: {
-									a: line(a, {x1: sectionA.from, x2: sectionA.to}),
-									b: line(b, {x1: sectionB.from, x2: sectionB.to}),
+									a: line(a, {y1: sectionA.from, y2: sectionA.to}),
+									b: line(b, {y1: sectionB.from, y2: sectionB.to}),
 								},
 								sliceA,
 								sliceB,

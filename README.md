@@ -17,23 +17,23 @@ npm i svg-path-fn --save
 
 #### Or simply download \*.js file
 
-[svg-path-fn.js@0.0.80](https://github.com/forceuser/svg-path-fn/releases/download/0.0.80/svg-path-fn.js)
+[svg-path-fn.js@0.0.81](https://github.com/forceuser/svg-path-fn/releases/download/0.0.81/svg-path-fn.js)
 
-[svg-path-fn.modern.js@0.0.80](https://github.com/forceuser/svg-path-fn/releases/download/0.0.80/svg-path-fn.modern.js) *for modern browsers only (see [.browserlistrc](https://github.com/forceuser/svg-path-fn/blob/master/.browserslistrc))*
+[svg-path-fn.modern.js@0.0.81](https://github.com/forceuser/svg-path-fn/releases/download/0.0.81/svg-path-fn.modern.js) *for modern browsers only (see [.browserlistrc](https://github.com/forceuser/svg-path-fn/blob/master/.browserslistrc))*
 
 #### Or just load from CDN
 
 ```html
-<script src="//cdn.jsdelivr.net/npm/svg-path-fn@0.0.80/dist/svg-path-fn.js"
-    integrity="sha512-jCEExdJfrkr5bKDd6z+1qaDZK7KR0+jJvHjKHqmCxwchIPMJwjuuwcuT7ACmSQoYooOWiiUfjPMydpj3TI+e6w==" crossorigin="anonymous">
+<script src="//cdn.jsdelivr.net/npm/svg-path-fn@0.0.81/dist/svg-path-fn.js"
+    integrity="sha512-0P8Zm+bJo1HUXe/eYNlT5qfOGQP9f91VT+5Y/oQYO5/qKxP8Z8fX5RM48Sf26GctpOKcfjAtKiYmluVGcZnqDg==" crossorigin="anonymous">
 </script>
 ```
 
 *if you need only modern browsers then use script below:*
 
 ```html
-<script src="//cdn.jsdelivr.net/npm/svg-path-fn@0.0.80/dist/svg-path-fn.modern.js"
-    integrity="sha512-BkhoxKq4kRn5n1F6kcGL1mx+qSB5dmAfce7SxnfkL6w4zxVUWmKySVNXEpAh9zrbqil1jFuF7fhop3tF5bzaLA==" crossorigin="anonymous">
+<script src="//cdn.jsdelivr.net/npm/svg-path-fn@0.0.81/dist/svg-path-fn.modern.js"
+    integrity="sha512-smoiZHT7O81LJmFE1fIL5Jbl9m76rxqLoLQjFXhQc5ak7vQa41U1EhDSjE00VNHIsGPYBtfQLsn6iATsn3wMFw==" crossorigin="anonymous">
 </script>
 ```
 
