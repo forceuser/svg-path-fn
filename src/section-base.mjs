@@ -108,98 +108,96 @@ export default function (type, params, fn) {
 			}
 			return intersections;
 		},
-		get length () {
-
-			if (length == null) {
-				length = 0;
-				// if (this.type === "line") {
-				// 	length = sqrt(
-				// 		pow(this.params.x2 - this.params.x1) +
-				// 		pow(this.params.y2 - this.params.y1)
-				// 	);
-
-				// 	this.rect = {
-				// 		top: Math.min(this.params.y1, this.params.y2),
-				// 		left: Math.min(this.params.x1, this.params.x2),
-				// 		bottom: Math.max(this.params.y1, this.params.y2),
-				// 		right: Math.max(this.params.x1, this.params.x2),
-				// 		from: 0,
-				// 		to: 1,
-				// 		simple: true,
-				// 	};
-				// 	this.slices.push(this.rect);
-				// 	return length;
-				// }
-				// else
-				if (this.type === "path") {
-					const {sections} = this.params;
-					let length = 0;
-					sections.forEach(item => {
-						length += item.length;
-					});
-					let t = 0;
-					sections.forEach(section => {
-						section.from = round(t);
-						section.size = section.length / length;
-						t += section.size;
-						section.to = round(t);
-					});
-				}
-
-				const accuracy = 20;
-				let l = this.val(0);
-				let lt = 0;
-				for (let i = 1; i <= accuracy; i++) {
-					const t = i / accuracy;
-					const p = this.val(t);
-					if (!this.rect) {
-						this.rect = {
-							top: p.x,
-							left: p.y,
-							bottom: p.x,
-							right: p.y,
-							from: 0,
-							to: 1,
-						};
-					}
-
-					if (p.y < this.rect.top) {
-						this.rect.top = p.y;
-					}
-					if (p.x < this.rect.left) {
-						this.rect.left = p.x;
-					}
-					if (p.y > this.rect.bottom) {
-						this.rect.bottom = p.y;
-					}
-					if (p.x > this.rect.right) {
-						this.rect.right = p.x;
-					}
-
-					this.slices.push({
-						top: p.y < l.y ? p.y : l.y,
-						left: p.x < l.x ? p.x : l.x,
-						bottom: p.y > l.y ? p.y : l.y,
-						right: p.x > l.x ? p.x : l.x,
-						from: lt,
-						to: t,
-					});
-
-					length += sqrt(pow(p.x - l.x) + pow(p.y - l.y));
-					l = p;
-					lt = t;
-				}
-				length = round(length);
-			}
-			return length;
-		},
 	};
+
+	if (length == null) {
+		length = 0;
+		// if (this.type === "line") {
+		// 	length = sqrt(
+		// 		pow(this.params.x2 - this.params.x1) +
+		// 		pow(this.params.y2 - this.params.y1)
+		// 	);
+
+		// 	this.rect = {
+		// 		top: Math.min(this.params.y1, this.params.y2),
+		// 		left: Math.min(this.params.x1, this.params.x2),
+		// 		bottom: Math.max(this.params.y1, this.params.y2),
+		// 		right: Math.max(this.params.x1, this.params.x2),
+		// 		from: 0,
+		// 		to: 1,
+		// 		simple: true,
+		// 	};
+		// 	this.slices.push(this.rect);
+		// 	return length;
+		// }
+		// else
+		if (this.type === "path") {
+			const {sections} = this.params;
+			let length = 0;
+			sections.forEach(item => {
+				length += item.length;
+			});
+			let t = 0;
+			sections.forEach(section => {
+				section.from = round(t);
+				section.size = section.length / length;
+				t += section.size;
+				section.to = round(t);
+			});
+		}
+
+		const accuracy = 20;
+		let l = this.val(0);
+		let lt = 0;
+		for (let i = 1; i <= accuracy; i++) {
+			const t = i / accuracy;
+			const p = this.val(t);
+			if (!this.rect) {
+				this.rect = {
+					top: p.x,
+					left: p.y,
+					bottom: p.x,
+					right: p.y,
+					from: 0,
+					to: 1,
+				};
+			}
+
+			if (p.y < this.rect.top) {
+				this.rect.top = p.y;
+			}
+			if (p.x < this.rect.left) {
+				this.rect.left = p.x;
+			}
+			if (p.y > this.rect.bottom) {
+				this.rect.bottom = p.y;
+			}
+			if (p.x > this.rect.right) {
+				this.rect.right = p.x;
+			}
+
+			this.slices.push({
+				top: p.y < l.y ? p.y : l.y,
+				left: p.x < l.x ? p.x : l.x,
+				bottom: p.y > l.y ? p.y : l.y,
+				right: p.x > l.x ? p.x : l.x,
+				from: lt,
+				to: t,
+			});
+
+			length += sqrt(pow(p.x - l.x) + pow(p.y - l.y));
+			l = p;
+			lt = t;
+		}
+		length = round(length);
+	}
 
 	if (type === "path") {
 		params.sections.forEach(section => {
 			section.path = ctrl;
 		});
 	}
+	ctrl.length = length;
 
 	return ctrl;
 }
