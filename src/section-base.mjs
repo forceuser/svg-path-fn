@@ -131,7 +131,7 @@ export default function (type, params, fn) {
 		// 	return length;
 		// }
 		// else
-		if (this.type === "path") {
+		if (ctrl.type === "path") {
 			const {sections} = this.params;
 			let length = 0;
 			sections.forEach(item => {
@@ -147,13 +147,13 @@ export default function (type, params, fn) {
 		}
 
 		const accuracy = 20;
-		let l = this.val(0);
+		let l = ctrl.val(0);
 		let lt = 0;
 		for (let i = 1; i <= accuracy; i++) {
 			const t = i / accuracy;
-			const p = this.val(t);
-			if (!this.rect) {
-				this.rect = {
+			const p = ctrl.val(t);
+			if (!ctrl.rect) {
+				ctrl.rect = {
 					top: p.x,
 					left: p.y,
 					bottom: p.x,
@@ -163,20 +163,20 @@ export default function (type, params, fn) {
 				};
 			}
 
-			if (p.y < this.rect.top) {
-				this.rect.top = p.y;
+			if (p.y < ctrl.rect.top) {
+				ctrl.rect.top = p.y;
 			}
-			if (p.x < this.rect.left) {
-				this.rect.left = p.x;
+			if (p.x < ctrl.rect.left) {
+				ctrl.rect.left = p.x;
 			}
-			if (p.y > this.rect.bottom) {
-				this.rect.bottom = p.y;
+			if (p.y > ctrl.rect.bottom) {
+				ctrl.rect.bottom = p.y;
 			}
-			if (p.x > this.rect.right) {
-				this.rect.right = p.x;
+			if (p.x > ctrl.rect.right) {
+				ctrl.rect.right = p.x;
 			}
 
-			this.slices.push({
+			ctrl.slices.push({
 				top: p.y < l.y ? p.y : l.y,
 				left: p.x < l.x ? p.x : l.x,
 				bottom: p.y > l.y ? p.y : l.y,
