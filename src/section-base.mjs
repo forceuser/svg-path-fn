@@ -29,8 +29,14 @@ export default function (type, params, fn, transformFn) {
 		intersectX (x) {
 			return this.intersect(lineFn({x1: x, x2: x, y1: 0, y2: 1, infinite: true}));
 		},
+		fromX (x) {
+			return ((this.intersect(lineFn({x1: x, x2: x, y1: 0, y2: 1, infinite: true})) || [])[0] || {}).y;
+		},
 		intersectY (y) {
 			return this.intersect(lineFn({x1: 0, x2: 1, y1: y, y2: y, infinite: true}));
+		},
+		fromY (y) {
+			return ((this.intersect(lineFn({x1: 0, x2: 1, y1: y, y2: y, infinite: true})) || [])[0] || {}).x;
 		},
 		intersectLine (params) {
 			return this.intersect(lineFn(params));
