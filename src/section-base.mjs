@@ -1,72 +1,6 @@
 import {round, pow, sqrt} from "./math.mjs";
-import {line, default as lineFn} from "./line.mjs";
-
-
-function intersectLineSegment (x1, y1, x2, y2, x3, y3, x4, y4) {
-	// Check if none of the lines are of length 0
-	if ((x1 === x2 && y1 === y2) || (x3 === x4 && y3 === y4)) {
-		return false;
-	}
-
-	const denominator = ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1));
-
-	// Lines are parallel
-	if (denominator === 0) {
-		// console.log("PARALLEL");
-		return false;
-	}
-
-	const ua = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / denominator;
-	const ub = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / denominator;
-
-	// is the intersection along the segments
-	if (ua < 0 || ua > 1 || ub < 0 || ub > 1) {
-		// console.log("ALONG", ua, ub);
-		return false;
-	}
-
-	// Return a object with the x and y coordinates of the intersection
-	const x = x1 + ua * (x2 - x1);
-	const y = y1 + ua * (y2 - y1);
-
-	return {x, y};
-}
-
-
-function lineIntersection (line1StartX, line1StartY, line1EndX, line1EndY, line2StartX, line2StartY, line2EndX, line2EndY) {
-// if the lines intersect, the result contains the x and y of the intersection (treating the lines as infinite) and booleans for whether line segment 1 or line segment 2 contain the point
-	const result = {
-		x: null,
-		y: null,
-		a: false,
-		b: false,
-	};
-	const denominator = ((line2EndY - line2StartY) * (line1EndX - line1StartX)) - ((line2EndX - line2StartX) * (line1EndY - line1StartY));
-	if (denominator === 0) {
-		return false;
-	}
-	let a = line1StartY - line2StartY;
-	let b = line1StartX - line2StartX;
-	const numerator1 = ((line2EndX - line2StartX) * a) - ((line2EndY - line2StartY) * b);
-	const numerator2 = ((line1EndX - line1StartX) * a) - ((line1EndY - line1StartY) * b);
-	a = numerator1 / denominator;
-	b = numerator2 / denominator;
-
-	// if we cast these lines infinitely in both directions, they intersect here:
-	result.x = line1StartX + (a * (line1EndX - line1StartX));
-	result.y = line1StartY + (a * (line1EndY - line1StartY));
-
-	// if line1 is a segment and line2 is infinite, they intersect if:
-	if (a > 0 && a < 1) {
-		result.a = true;
-	}
-	// if line2 is a segment and line1 is infinite, they intersect if:
-	if (b > 0 && b < 1) {
-		result.b = true;
-	}
-	// if line1 and line2 are segments, they intersect if both of the above are true
-	return result;
-}
+import {line, lineIntersection, default as lineFn} from "./line.mjs";
+import svgPathFn from "./svg-path.mjs";
 
 let id = 0;
 export default function (type, params, fn, transformFn) {
@@ -102,6 +36,9 @@ export default function (type, params, fn, transformFn) {
 			return this.intersect(lineFn(params));
 		},
 		intersect (sectionB) {
+			if (typeof sectionB === "string") {
+				sectionB = svgPathFn(sectionB);
+			}
 			const sectionA = this;
 			const makeSlices = (fn, from, to, count = 7, zoom) => {
 				const slices = [];
@@ -164,7 +101,7 @@ export default function (type, params, fn, transformFn) {
 						);
 						if (ipoint && (ipoint.a || (sectionA.line && sectionA.params.infinite)) && (ipoint.b || (sectionB.line && sectionB.params.infinite))) {// && !intersects.some(i => i.x === ipoint.x && i.y === ipoint.y)) {
 							// intersects.push(ipoint);
-							if (zoom > 1 && (!sectionA.line || !sectionB.line)) {
+							if (zoom > 1 && (!sectionA.line || !sectionB.line)) { // zoom in
 								const _slicesA = sectionA.line ? [sliceA] : makeSlices(sectionA, sliceA.from, sliceA.to, 10, zoom);
 								const _slicesB = sectionB.line ? [sliceB] : makeSlices(sectionB, sliceB.from, sliceB.to, 10, zoom);
 								sectionA.debugSlices.push.apply(sectionA.debugSlices, _slicesA);
@@ -196,15 +133,22 @@ export default function (type, params, fn, transformFn) {
 									a = (sliceA.from + sliceA.to) / 2;
 									b = (sliceB.from + sliceB.to) / 2;
 
-									let da = a / 2;
-									let db = b / 2;
+									let da = a;
+									let db = b;
 									let maxCount = 20;
 									const accuracy = 1 / 10000000;
-									const iter = () => {
+									const iter = (isX) => {
+										da = da / 2;
+										db = db / 2;
 										const vav = [a, a + da, a - da];
 										const vbv = [b, b + db, b - db];
-										const va = vav.map(i => sectionA.val(i).x);
-										const vb = vbv.map(i => sectionB.val(i).x);
+
+										const va = (isX || isX == null) ? vav.map(i => sectionA.val(i).x) : vav.map(i => sectionA.val(i).y);
+										const vb = (isX || isX == null) ? vbv.map(i => sectionB.val(i).x) : vbv.map(i => sectionB.val(i).y);
+
+										if (isX === null) {
+											isX = !((va[0] === va[1] && va[0] === va[2]) || (vb[0] === vb[1] && vb[0] === vb[2]));
+										}
 										let min;
 										let minAidx;
 										let minBidx;
@@ -223,9 +167,7 @@ export default function (type, params, fn, transformFn) {
 
 										if (min > accuracy && maxCount > 0) {
 											maxCount--;
-											da = da / 2;
-											db = db / 2;
-											iter();
+											iter(isX);
 										}
 									};
 									iter();
