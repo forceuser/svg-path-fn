@@ -79,7 +79,7 @@ function vectorAngle ([ux, uy], [vx, vy]) {
 	return res;
 }
 
-export default function (params) {
+export default function (params, transformParams) {
 	const {x1, y1, x2, y2, fa, fs, rx, ry, phiDeg} = params;
 	let length;
 	if (!rx || !ry) {
@@ -105,5 +105,5 @@ export default function (params) {
 	return sectionBase("arc", params, t => {
 		const a = line(t, {y1: ellipseParams.theta, y2: ellipseParams.theta + ellipseParams.dTheta});
 		return ellipse(ellipseParams.rx, ellipseParams.ry, ellipseParams.cx, ellipseParams.cy, rad(phiDeg), a);
-	});
+	}, transformParams);
 }

@@ -12,13 +12,13 @@ export function createQuadraticBezier ({p1, p2, h}) {
 	};
 }
 
-export default function (params) {
+export default function (params, transformParams) {
 	const {x1, y1, x2, y2, hx, hy} = params;
 	const fn = createQuadraticBezier({
 		p1: {x: x1, y: y1},
 		p2: {x: x2, y: y2},
 		h: {x: hx, y: hy},
 	});
-	return sectionBase("quadratic-bezier", params, fn);
+	return sectionBase("quadratic-bezier", params, fn, transformParams);
 }
 

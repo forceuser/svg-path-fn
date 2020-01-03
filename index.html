@@ -86,67 +86,97 @@
 			ctx.stroke();
 			ctx.restore();
 		}
+
+
+		const fn4 = svgPathFn(`M0.0004566,0.686302 C0.0004566,0.686302 -0.0114155,0.6909979 0.0027397,0.6857786
+					C0.016895,0.6805592 0.0584475,0.6656967 0.0849315,0.6550908
+					C0.1114155,0.6444848 0.1347032,0.63365 0.1616438,0.6221428
+					C0.1885845,0.6106357 0.2187215,0.5980878 0.2465753,0.5860478
+					C0.2744292,0.5740078 0.3009132,0.5626347 0.3287671,0.5499027
+					C0.356621,0.5371706 0.3858447,0.5548891 0.4136986,0.5096556
+					C0.4415525,0.464422 0.4680365,0.2923088 0.4958904,0.2785013
+					C0.5237443,0.2646938 0.5525114,0.4093633 0.5808219,0.4268107
+					C0.6091324,0.4442582 0.6378995,0.3987808 0.6657534,0.383186
+					C0.6936073,0.3675912 0.7200913,0.3502857 0.7479452,0.3332419
+					C0.7757991,0.3161981 0.8050228,0.2990085 0.8328767,0.2809231
+					C0.8607306,0.2628378 0.8876712,0.2437723 0.9150685,0.2247296
+					C0.9424658,0.2056868 0.9835616,0.1763438 0.9972603,0.1666667`, p => {
+						p.x = p.x * 500;
+						p.y = p.y * 500 - 100;
+						return p;
+					});
+
+
+
+
 		drawPath(fn1, "red");
 		drawPath(fn2, "green");
 		drawPath(fn3, "purple");
+		drawPath(fn4, "deeppink");
+
+		const idp = fn4.intersectX(250)[0];
+		console.log("intersectX", idp, fn4.val(idp.abs.a));
+		drawPoint(idp.x, idp.y, "red", 3);
+
 		// drawPoint(52.5,	 10);
 		// drawPoint(110, 215, "yellow");
+		const col = ["red", "orange", "yellow", "green", "cyan", "blue", "purple"];
 		console.log(fn1, fn2, fn3);
 		console.log("fn1.val(1)", fn1.val(1));
-		const intersections = fn1.intersect(fn3);
+		const intersections = fn3.intersect(fn4);
 		console.log("intersections", intersections);
 		intersections.forEach(i => {
 			drawPoint(i.x, i.y, "black", 2);
 		});
-		fn3.params.sections.forEach(section => {
-			section.debugSlices.forEach(slice => {
-				ctx.beginPath();
-				ctx.strokeStyle = "black";
-				ctx.rect(slice.left, slice.top, slice.right - slice.left, slice.bottom - slice.top);
-				ctx.stroke();
-			});
-			// section.slices.forEach(slice => {
+		fn3.sections.forEach((section) => {
+			// section.debugSlices.forEach((slice, idx) => {
+			// 	// console.log("debugSlice", slice);
 			// 	ctx.beginPath();
-			// 	ctx.strokeStyle = "red";
-			// 	ctx.rect(slice.left, slice.top, slice.right - slice.left, slice.bottom - slice.top);
+			// 	ctx.strokeStyle = "black";
+			// 	ctx.moveTo(slice.ax, slice.ay);
+			// 	ctx.lineTo(slice.bx, slice.by);
+			// 	ctx.stroke();
+			// });
+			// section.slices.forEach((slice, idx) => {
+			// 	ctx.beginPath();
+			// 	ctx.strokeStyle = col[idx];
+			// 	ctx.moveTo(slice.ax, slice.ay);
+			// 	ctx.lineTo(slice.bx, slice.by);
 			// 	ctx.stroke();
 			// });
 		});
 
-		fn2.params.sections.forEach(section => {
-			section.debugSlices.forEach(slice => {
-				ctx.beginPath();
-				ctx.strokeStyle = "gray";
-				ctx.rect(slice.left, slice.top, slice.right - slice.left, slice.bottom - slice.top);
-				ctx.stroke();
-			});
-			// section.slices.forEach(slice => {
+
+		fn2.sections.forEach((section, sidx) => {
+			// section.debugSlices.forEach((slice, idx) => {
 			// 	ctx.beginPath();
-			// 	ctx.strokeStyle = "purple";
-			// 	ctx.rect(slice.left, slice.top, slice.right - slice.left, slice.bottom - slice.top);
+			// 	ctx.strokeStyle = "yellow";
+			// 	ctx.moveTo(slice.ax, slice.ay);
+			// 	ctx.lineTo(slice.bx, slice.by);
+			// 	// ctx.rect(slice.left, slice.top, slice.right - slice.left, slice.bottom - slice.top);
+			// 	ctx.stroke();
+			// });
+			// section.slices.forEach((slice, idx) => {
+			// 	ctx.beginPath();
+			// 	ctx.strokeStyle = col[idx];
+			// 	ctx.moveTo(slice.ax, slice.ay);
+			// 	ctx.lineTo(slice.bx, slice.by);
+			// 	// ctx.rect(slice.left, slice.top, slice.right - slice.left, slice.bottom - slice.top);
 			// 	ctx.stroke();
 			// });
 		});
 
-		const fn4 = svgPathFn(`M0.0004566,0.686302 C0.0004566,0.686302 -0.0114155,0.6909979 0.0027397,0.6857786
-C0.016895,0.6805592 0.0584475,0.6656967 0.0849315,0.6550908
-C0.1114155,0.6444848 0.1347032,0.63365 0.1616438,0.6221428
-C0.1885845,0.6106357 0.2187215,0.5980878 0.2465753,0.5860478
-C0.2744292,0.5740078 0.3009132,0.5626347 0.3287671,0.5499027
-C0.356621,0.5371706 0.3858447,0.5548891 0.4136986,0.5096556
-C0.4415525,0.464422 0.4680365,0.2923088 0.4958904,0.2785013
-C0.5237443,0.2646938 0.5525114,0.4093633 0.5808219,0.4268107
-C0.6091324,0.4442582 0.6378995,0.3987808 0.6657534,0.383186
-C0.6936073,0.3675912 0.7200913,0.3502857 0.7479452,0.3332419
-C0.7757991,0.3161981 0.8050228,0.2990085 0.8328767,0.2809231
-C0.8607306,0.2628378 0.8876712,0.2437723 0.9150685,0.2247296
-C0.9424658,0.2056868 0.9835616,0.1763438 0.9972603,0.1666667`);
-	drawPath(fn4, "purple");
-	console.log("fn4", fn4);
-	fn4.val(0);
-	console.log("fn4.val(1)", fn4.val(1));
-	console.log("inter", fn4.intersect(svgPathFn(`M${1},0L${1},1`)));
-		// drawPoint(110, 215, "yellow");
+
+
+
+
+		const f5 = svgPathFn.fromData([
+			{x: 0, y: 0.3},
+			{x: 0.2, y: 0.5},
+			{x: 0.5, y: 0.2},
+			{x: 1, y: 0.7},
+		]);
+		console.log("f5", f5);
 	</script>
 	<!-- <div style="position: absolute; top: 2px; left: 2px; z-index: -1;">
 		<svg width="500" height="500" xmlns="http://www.w3.org/2000/svg">

@@ -16,7 +16,7 @@ export function createCubicBezier ({p1, p2, h1, h2}) {
 	};
 }
 
-export default function (params) {
+export default function (params, transformParams) {
 	const {x1, y1, x2, y2, h1x, h1y, h2x, h2y} = params;
 	const fn = createCubicBezier({
 		p1: {x: x1, y: y1},
@@ -24,6 +24,6 @@ export default function (params) {
 		h1: {x: h1x, y: h1y},
 		h2: {x: h2x, y: h2y},
 	});
-	return sectionBase("cubic-bezier", params, fn);
+	return sectionBase("cubic-bezier", params, fn, transformParams);
 }
 
