@@ -31,6 +31,7 @@ export function catmullRomToSvgPath (data, k = 1) {
 			round(r2.x), round(r2.y),
 		].join(",") + "\n";
 	}
+	path += `L${round(data[size - 1].x)},${round(data[size - 1].y)}\n`;
 
 	return path;
 }

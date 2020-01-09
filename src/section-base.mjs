@@ -23,10 +23,6 @@ export default function (type, params, fn, transformFn) {
 			res.y = round(res.y);
 			return res;
 		},
-		// transform (transformFn) {
-		// 	const section = Object.create(this);
-		// 	return section.init(transformFn);
-		// },
 		debugSlices: [],
 		intersectX (x) {
 			return this.intersect(lineFn({x1: x, x2: x, y1: 0, y2: 1, infinite: true}));
@@ -56,7 +52,6 @@ export default function (type, params, fn, transformFn) {
 				let i = 0;
 				let l;
 				while (i <= count) {
-					// Math.max(0, Math.min(1, round(t)))
 					const p = fn.val(t);
 					if (l) {
 						slices.push({
