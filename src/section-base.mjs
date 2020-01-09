@@ -10,7 +10,7 @@ export default function (type, params, fn, transformFn) {
 		slices: [],
 		params,
 		val (t) {
-			// t = round(t);
+			t = round(t);
 			const section = this;
 			let res = fn.call(section, t, section);
 			if (transformFn && section.type !== "path") {
@@ -59,8 +59,8 @@ export default function (type, params, fn, transformFn) {
 							ax: l.x,
 							by: p.y,
 							bx: p.x,
-							from: lt,
-							to: t,
+							from: round(lt),
+							to: round(t),
 							zoom,
 						});
 					}
@@ -103,6 +103,7 @@ export default function (type, params, fn, transformFn) {
 							sliceA.ax, sliceA.ay, sliceA.bx, sliceA.by,
 							sliceB.ax, sliceB.ay, sliceB.bx, sliceB.by
 						);
+
 						if (ipoint && (ipoint.a || (sectionA.line && sectionA.params.infinite)) && (ipoint.b || (sectionB.line && sectionB.params.infinite))) {// && !intersects.some(i => i.x === ipoint.x && i.y === ipoint.y)) {
 							// intersects.push(ipoint);
 							if (zoom > 1 && (!sectionA.line || !sectionB.line)) { // zoom in
@@ -293,8 +294,8 @@ export default function (type, params, fn, transformFn) {
 						ax: l.x,
 						by: p.y,
 						bx: p.x,
-						from: lt,
-						to: t,
+						from: round(lt),
+						to: round(t),
 					});
 
 					length += sqrt(pow(p.x - l.x) + pow(p.y - l.y));

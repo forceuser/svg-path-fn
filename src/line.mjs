@@ -26,11 +26,11 @@ export function lineIntersection (line1StartX, line1StartY, line1EndX, line1EndY
 	result.y = round(line1StartY + (a * (line1EndY - line1StartY)));
 
 	// if line1 is a segment and line2 is infinite, they intersect if:
-	if (a > 0 && a < 1) {
+	if (a >= 0 && a <= 1) {
 		result.a = true;
 	}
 	// if line2 is a segment and line1 is infinite, they intersect if:
-	if (b > 0 && b < 1) {
+	if (b >= 0 && b <= 1) {
 		result.b = true;
 	}
 	// if line1 and line2 are segments, they intersect if both of the above are true
