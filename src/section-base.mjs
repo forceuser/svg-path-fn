@@ -10,6 +10,7 @@ export default function (type, params, fn, transformFn) {
 		slices: [],
 		params,
 		val (t) {
+			// t = round(t);
 			const section = this;
 			let res = fn.call(section, t, section);
 			if (transformFn && section.type !== "path") {
@@ -18,7 +19,8 @@ export default function (type, params, fn, transformFn) {
 					res = transRes;
 				}
 			}
-
+			res.x = round(res.x);
+			res.y = round(res.y);
 			return res;
 		},
 		// transform (transformFn) {
@@ -85,6 +87,7 @@ export default function (type, params, fn, transformFn) {
 					lineIntersection(l.x1, l.y1, l.x2, l.y2, from.x, to.y, to.x, to.y), // bottom edge
 					lineIntersection(l.x1, l.y1, l.x2, l.y2, from.x, from.y, from.x, to.y), // left edge
 				].filter(i => i && i.x >= from.x && i.x <= to.x && i.y >= from.y && i.y <= to.y);
+
 				return {
 					ax: points[0].x,
 					ay: points[0].y,

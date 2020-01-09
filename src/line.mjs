@@ -22,8 +22,8 @@ export function lineIntersection (line1StartX, line1StartY, line1EndX, line1EndY
 	b = numerator2 / denominator;
 
 	// if we cast these lines infinitely in both directions, they intersect here:
-	result.x = line1StartX + (a * (line1EndX - line1StartX));
-	result.y = line1StartY + (a * (line1EndY - line1StartY));
+	result.x = round(line1StartX + (a * (line1EndX - line1StartX)));
+	result.y = round(line1StartY + (a * (line1EndY - line1StartY)));
 
 	// if line1 is a segment and line2 is infinite, they intersect if:
 	if (a > 0 && a < 1) {
@@ -42,11 +42,14 @@ export const line = (x, {x1 = 0, y1 = 0, x2 = 1, y2 = 1}) => {
 };
 
 export default function (params, transformParams) {
-	const {x1, y1, x2, y2} = params;
+	params.x1 = round(params.x1);
+	params.x2 = round(params.x2);
+	params.y1 = round(params.y1);
+	params.y2 = round(params.y2);
 	return sectionBase("line", params, t => {
 		return {
-			x: line(t, {y1: x1, y2: x2}),
-			y: line(t, {y1, y2}),
+			x: line(t, {y1: params.x1, y2: params.x2}),
+			y: line(t, {y1: params.y1, y2: params.y2}),
 		};
 	}, transformParams);
 }
