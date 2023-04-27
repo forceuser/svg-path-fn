@@ -281,6 +281,11 @@
 				drawPoint(i.x, i.y, "black", 2);
 			});
 
+			const intersections2 = fn1.intersect(fn4);
+			intersections2.forEach(i => {
+				drawPoint(i.x, i.y, "blue", 2);
+			});
+
 
 
 			fn3.sections.forEach((section) => {
